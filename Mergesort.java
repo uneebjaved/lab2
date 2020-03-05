@@ -190,9 +190,14 @@ public class Mergesort {
 			log("second sorted sequence: " + headOfSeq2.toString());
 			
 
-			/*
-			  Fill in this code! You can use merge() and findMaximalIncreasingSubsequence().
-			 */
+			//I(Uneeb) added everything inside the "//"s on Thursday 03/5
+			merge(lastInSeq1,headOfSeq2);
+			lastInSeq1 = lastInSeq2;
+			headOfSeq2 = restOfList.head();
+			lastInSeq2 = findMaximalIncreasingSubsequence(headOfSeq2)
+			restOfList.head() = restOfList.next();
+			lastInSeq2 = findMaximalIncreasingSubsequence(restOfList);
+			//
 		}
 
 
