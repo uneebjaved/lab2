@@ -1,4 +1,7 @@
 import java.util.Arrays;
+import edu.princeton.cs.algs4.StdRandom;
+
+import java.util.Vector;
 
 /*
   This code is taken from https://algs4.cs.princeton.edu/code/edu/princeton/cs/algs4/QuickX.java.html
@@ -75,7 +78,8 @@ public class QuickSort {
 	private static int randomPivot(Comparable[] a, int lo, int hi) {
 		// Fill this in!
 		// Hint: use the StdRandom library.
-		return -1; // Remove this line and replace it with your code
+		
+		return StdRandom.uniform(hi-lo) + lo
 	}
 	
 	// Returns the index of a pivot in the subarray a[lo..hi].
