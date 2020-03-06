@@ -1,8 +1,5 @@
 import java.util.Arrays;
 
-
-import java.util.Vector;
-
 /*
   This code is taken from https://algs4.cs.princeton.edu/code/edu/princeton/cs/algs4/QuickX.java.html
    and has been modified for CIS 27.
