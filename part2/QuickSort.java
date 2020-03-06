@@ -1,5 +1,5 @@
 import java.util.Arrays;
-import edu.princeton.cs.algs4.StdRandom;
+
 
 import java.util.Vector;
 
@@ -207,6 +207,7 @@ public class QuickSort {
 	}
 
 	public static void main(String[] args) {
+		
 		
 		/*
 		 * You will need to add code here to:
