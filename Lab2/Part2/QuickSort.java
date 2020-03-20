@@ -75,7 +75,7 @@ public class QuickSort {
 	private static int randomPivot(Comparable[] a, int lo, int hi) {
 		// Fill this in!
 		// Hint: use the StdRandom library.
-		return -1; // Remove this line and replace it with your code
+		return stdRandom.uniform(lo,hi); // Remove this line and replace it with your code
 	}
 	
 	// Returns the index of a pivot in the subarray a[lo..hi].
