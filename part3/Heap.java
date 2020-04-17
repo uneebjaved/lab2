@@ -55,6 +55,13 @@ public class Heap {
          * Fill in this method! Use the code on p. 324 of the book as a model,
          * but change it so each node in the heap has 3 children instead of 2.
          */
+	    for (int k = Math.round(n/3.0); k >= 1; k--)
+		sink(a, k, n);
+	    while (n > 1)
+	{
+			exch(a, 1, n--);
+			sink(a, 1, n);
+	}
     }
     
       /***************************************************************************
@@ -67,6 +74,16 @@ public class Heap {
     	 * Fill in this method! Use the code on p. 316 of the book as a model,
     	 * but change it so each node in the heap has 3 children instead of 2.
     	 */
+	    while(3*k <= N){
+            int n = 3*i;
+            if(n < N && less(n, n+1) && greater(n,n-1))
+   		n++;
+	    if(n < N && less(n,n-1) && less(n+1,n))
+	    	n--;
+            if(!less(k,n))
+                break;
+            exch(k,n);
+            k = n;
     }
 
     /***************************************************************************
