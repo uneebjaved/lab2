@@ -119,14 +119,14 @@ public class Mergesort {
 	// subsequence starting at l (which may be null).
         // See the Lab 2 assignment for the definition of a maximal increasing subsequence.
 	private static ListNode findMaximalIncreasingSubsequence(ListNode l) {
-	    first = l.value();
-	    if(first.length()==1){
-	        return first;
+	    
+	    if(l.length()==1){
+	        return l;
 	    }else{
-	        if(first.next().value()<= first.value()){
-	            return first;
+	        if(l.next().value()<= l.value()){
+	            return l;
 	        }else{
-	            return findMaximalIncreasingSubsequence(first.next());
+	            return findMaximalIncreasingSubsequence(l.next());
 	        }
 	    }
 	}
@@ -189,13 +189,47 @@ public class Mergesort {
 			log("first sorted sequence: " + headOfSeq1.toString());
 			log("second sorted sequence: " + headOfSeq2.toString());
 			
-			//changes made by Uneeb on 5th 2:25
-			merge(lastInSeq1, lastInSeq2);
-			headOfSeq1 = lastInSeq2.next();
-			lastInSeq1 = findMaximalIncreasingSubsequence(headOfSeq1);
-			headOfSeq2 = lastInSeq1.next();
-			lastInSeq2 = findMaximalIncreasingSubsequence(headOfSeq2);
-			//
+			lastInSeq1.setNext(null);
+			lastInSeq2.setNext(null);
+			
+			if (less(headOfSeq2.value(),headOfSeq1.value())) {//why can't use leq
+				ListNode temp = headOfSeq1;
+				headOfSeq1 = headOfSeq2;
+				headOfSeq2 = temp;
+			}
+			
+			merge(headOfSeq1,headOfSeq2);
+			
+			if (restOfList.length() == 0) {
+				break;
+			}
+			if (restOfList.length() == 1) {
+				headOfSeq2 = null;
+				headOfSeq2 = restOfList;
+				lastInSeq2 = findMaximalIncreasingSubsequence(headOfSeq2);
+				merge(headOfSeq1, headOfSeq2);
+		
+			}
+			else {
+				
+				
+				headOfSeq2 = null;
+				
+				headOfSeq1.last().setNext(restOfList);
+				
+				lastInSeq1 = findMaximalIncreasingSubsequence(headOfSeq1);
+				
+				headOfSeq2 = lastInSeq1.next();
+				lastInSeq2 = findMaximalIncreasingSubsequence(headOfSeq2);
+				
+			}
+			
+			restOfList = lastInSeq2.next();
+			
+			if(restOfList == null) {
+				lastInSeq1.setNext(null);
+				merge(headOfSeq1,headOfSeq2);
+			}
 		}
 
 
