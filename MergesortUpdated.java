@@ -244,7 +244,7 @@ public class Mergesort {
 			//if(headOfSeq1.next() != lastInSeq1) {
 				
 			//}
-			log("bfr changing rest " +restOfList);
+			//log("bfr changing rest " +restOfList);
 			lastInSeq1.setNext(null);
 			lastInSeq2.setNext(null);
 			
@@ -252,11 +252,11 @@ public class Mergesort {
 			//headOfSeq2 = restOfList;
 			
 			//lastInSeq2 = findMaximalIncreasingSubsequence(headOfSeq2);
-			log("bfr merge rest " + restOfList);
+			/*log("bfr merge rest " + restOfList);
 			log("bfr merge head1 " + headOfSeq1);
 			log("bfr merge head2 " + headOfSeq2);
 			log("bfr merge last1 " + lastInSeq1);
-			log("bfr merge last2 " + lastInSeq2);
+			log("bfr merge last2 " + lastInSeq2);*/
 			if(less(headOfSeq2.value(),headOfSeq1.value())) {//why can't use leq
 				ListNode temp = headOfSeq1;
 				headOfSeq1 = headOfSeq2;
@@ -264,10 +264,12 @@ public class Mergesort {
 			}
 			
 			merge(headOfSeq1,headOfSeq2);
-			log("rest " +restOfList);
+			/*log("rest " +restOfList);
 			log("head" + headOfSeq2);
 			log("last" + lastInSeq2);
 			lastInSeq2 = restOfList;
+			log("head" + headOfSeq2);
+			log("last" + lastInSeq2);*/
 			/*
 			log("bfr 1 " + headOfSeq1);
 			headOfSeq1.last().setNext(restOfList);
@@ -290,14 +292,19 @@ public class Mergesort {
 			log("after merge 2" + headOfSeq2);
 			log("after merge 2" + lastInSeq2);
 			log("rstOf " +restOfList);*/
-			if(restOfList.length() == 0) {
-				break;
-			}
+			
 			if(restOfList.length() == 1) {
-				headOfSeq2 = null;
-				headOfSeq2 = restOfList;
-				lastInSeq2 = findMaximalIncreasingSubsequence(headOfSeq2);
-				merge(headOfSeq1, headOfSeq2);
+				
+				merge(headOfSeq1, restOfList);
+				lastInSeq2 = null;
+				
+				/*log("this is sorted head1 " + headOfSeq1);
+				log("this is last1 " + lastInSeq1);
+				log("this is head2 " + headOfSeq2);
+				log("this is last2 " + lastInSeq2);
+				*/
+				break;
+				
 		
 			}
 			else {
@@ -346,17 +353,14 @@ public class Mergesort {
 			
 			
 			*/
-			log("last bfr " +lastInSeq1);
+			
 			restOfList = lastInSeq2.next();
-			log("rest now " +restOfList);
-			log("last now " +lastInSeq1);
-			if(restOfList == null) {
-				lastInSeq1.setNext(null);
-				merge(headOfSeq1,headOfSeq2);
-			}
+			//log("rest now " +restOfList);
+			//log("last now " +lastInSeq1);
+			
 		}
 		
-		log(headOfSeq1.toString());
+		//log("final " + headOfSeq1.toString());
 		// Update the head, since the order may have changed
 		l.setHead(headOfSeq1);
 		assert(l.isSorted());
@@ -568,12 +572,12 @@ public class Mergesort {
 	}
 	
 	public static void main(String[] args) {
-		//testMerge();
+		testMerge();
 		
 		sortTest("MERGESORTEXAMPLE");	
-		//sortTest("");
-		//sortTest("A");
-		//sortTest("bottomupmergesortconsistsofasequenceofpassesoverthewholearray");
-		//sortTest("thefirststepinastudyofcomplexityistoestablishamodelofcomputation.generally,researchersstrivetounderstandthesimplestmodelrelevanttoaproblem.");
+		sortTest("");
+		sortTest("A");
+		sortTest("bottomupmergesortconsistsofasequenceofpassesoverthewholearray");
+		sortTest("thefirststepinastudyofcomplexityistoestablishamodelofcomputation.generally,researchersstrivetounderstandthesimplestmodelrelevanttoaproblem.");
 	}
 }
