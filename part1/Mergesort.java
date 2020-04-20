@@ -200,36 +200,29 @@ public class Mergesort {
 			
 			merge(headOfSeq1,headOfSeq2);
 			
-			if (restOfList.length() == 0) {
-				break;
-			}
+			
 			if (restOfList.length() == 1) {
-				headOfSeq2 = null;
-				headOfSeq2 = restOfList;
-				lastInSeq2 = findMaximalIncreasingSubsequence(headOfSeq2);
-				merge(headOfSeq1, headOfSeq2);
+				merge(headOfSeq1, restOfList);
+				lastInSeq2 = null;
+				break;
 		
 			}
 			else {
-				
-				
 				headOfSeq2 = null;
-				
+				//log("bfr 1 " + headOfSeq1);
 				headOfSeq1.last().setNext(restOfList);
-				
+				//log("bfr 1 " + headOfSeq1);
 				lastInSeq1 = findMaximalIncreasingSubsequence(headOfSeq1);
-				
+				//log("end 1 " + lastInSeq1);
 				headOfSeq2 = lastInSeq1.next();
 				lastInSeq2 = findMaximalIncreasingSubsequence(headOfSeq2);
+				//log("head2 " + headOfSeq2);
+				//log("last2 " + lastInSeq2);
+				//log("rest of " + restOfList);
 				
 			}
 			
 			restOfList = lastInSeq2.next();
-			
-			if(restOfList == null) {
-				lastInSeq1.setNext(null);
-				merge(headOfSeq1,headOfSeq2);
-			}
 		}
 
 
