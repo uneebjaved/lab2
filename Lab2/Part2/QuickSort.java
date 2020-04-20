@@ -75,7 +75,8 @@ public class QuickSort {
 	private static int randomPivot(Comparable[] a, int lo, int hi) {
 		// Fill this in!
 		// Hint: use the StdRandom library.
-		return stdRandom.uniform(lo,hi); // Remove this line and replace it with your code
+		
+		return StdRandom.uniform(hi-lo) + lo;
 	}
 	
 	// Returns the index of a pivot in the subarray a[lo..hi].
@@ -162,8 +163,9 @@ public class QuickSort {
 	// print array to standard output
 	private static void show(Comparable[] a) {
 		for (int i = 0; i < a.length; i++) {
-			System.out.println(a[i]);
+			System.out.print(a[i]);
 		}
+		System.out.println();
 	}
 	
 	private static String sortString(String s) {
@@ -178,6 +180,7 @@ public class QuickSort {
 		}
 		return result;
 	}
+	
 
 	private static Character[] stringToArray(String s) {
 		Character[] testArray = new Character[s.length()];
@@ -198,11 +201,13 @@ public class QuickSort {
 		Character[] charArray = stringToArray(s);
 		String sortedString = sortString(s);
 		sort(charArray);
+		show(charArray);
 		assert(arrayToString(charArray).equals(sortedString));
 		assert(isSorted(charArray));
 	}
 
 	public static void main(String[] args) {
+		
 		
 		/*
 		 * You will need to add code here to:
@@ -212,12 +217,42 @@ public class QuickSort {
 		 * 
 		 * Add helper methods as needed to break up your code.
 		 */
+		int counter = 1000;
 		
-		
+
+        double using_random_pivot, using_3median;
+        
+        while(counter < 10000000) {
+        	Integer random_thousand_array1[] = new Integer[counter];
+    		Integer random_thousand_array2[] = new Integer[counter];
+            for (int i = 0 ; i < counter; i++){
+                random_thousand_array1[i] = StdRandom.uniform(counter);
+                random_thousand_array2[i] = random_thousand_array1[i];
+            }
+        USE_RANDOM_PIVOT = false;
+        
+        System.out.println("For N: " + counter);
+        
+        Stopwatch timer = new Stopwatch();
+        double prevTime = timer.elapsedTime();
+        sort(random_thousand_array1);
+        using_3median = timer.elapsedTime() - prevTime;
+        
+        USE_RANDOM_PIVOT = true;
+
+        prevTime = timer.elapsedTime();
+       
+        sort(random_thousand_array2);
+        using_random_pivot = timer.elapsedTime() - prevTime;
+        System.out.println("using Random pivot took "+ using_random_pivot 
+        + "s , and using 3 median took " + using_3median +"s.");
+        System.out.println();
+        counter = counter*10;
+        }
 		/*
 		 * If you'd like, you can remove these tests once you've tested the code with your randomPivot() method.
 		 */
-		sortTest("QUICKSORTEXAMPLE");	
+		/*sortTest("QUICKSORTEXAMPLE");	
 		sortTest("");
 		sortTest("A");
 		sortTest("bottomupmergesortconsistsofasequenceofpassesoverthewholearray");
@@ -230,7 +265,7 @@ public class QuickSort {
 		sortTest("A");
 		sortTest("bottomupmergesortconsistsofasequenceofpassesoverthewholearray");
 		sortTest("thefirststepinastudyofcomplexityistoestablishamodelofcomputation.generally,researchersstrivetounderstandthesimplestmodelrelevanttoaproblem.");
-
+*/
 	}
 
 }
@@ -250,7 +285,7 @@ public class QuickSort {
       *  the Free Software Foundation, either version 3 of the License, or
       *  (at your option) any later version.
       *
-      *  algs4.jar is distributed in the hope that it will be useful,
+      *  algs4.jar is distributed in the hope that it will be useful,	
       *  but WITHOUT ANY WARRANTY; without even the implied warranty of
       *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
       *  GNU General Public License for more details.
