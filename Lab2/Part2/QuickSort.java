@@ -217,58 +217,42 @@ public class QuickSort {
 		 * 
 		 * Add helper methods as needed to break up your code.
 		 */
-		int counter = 1000;
-		
+		int counter = 100000;
+        	double using_random_pivot, using_3median;
+        	QuickSort.INSERTION_SORT_CUTOFF = 10;
+        	for(;QuickSort.INSERTION_SORT_CUTOFF <= 30; QuickSort.INSERTION_SORT_CUTOFF = QuickSort.INSERTION_SORT_CUTOFF +1){
+            		System.out.print(QuickSort.INSERTION_SORT_CUTOFF );
+		    while(counter < 1000000) {
+	//                Integer random_thousand_array1[] = new Integer[counter];
+			Integer random_thousand_array2[] = new Integer[counter];
+			for (int i = 0 ; i < counter; i++){
+	//                    random_thousand_array1[i] = StdRandom.uniform(counter);
+	//                    random_thousand_array2[i] = random_thousand_array1[i];
+			    random_thousand_array2[i] = StdRandom.uniform(counter);
+			}
+	//                USE_RANDOM_PIVOT = false;
+	//
+	//                System.out.println("For N: " + counter);
+	//                System.out.println();
+	//                Stopwatch timer = new Stopwatch();
+	//                double prevTime = timer.elapsedTime();
+	//                sort(random_thousand_array1);
+	//                using_3median = timer.elapsedTime() - prevTime;
 
-        double using_random_pivot, using_3median;
-        
-        while(counter < 10000000) {
-        	Integer random_thousand_array1[] = new Integer[counter];
-    		Integer random_thousand_array2[] = new Integer[counter];
-            for (int i = 0 ; i < counter; i++){
-                random_thousand_array1[i] = StdRandom.uniform(counter);
-                random_thousand_array2[i] = random_thousand_array1[i];
-            }
-        USE_RANDOM_PIVOT = false;
-        
-        System.out.println("For N: " + counter);
-        
-        Stopwatch timer = new Stopwatch();
-        double prevTime = timer.elapsedTime();
-        sort(random_thousand_array1);
-        using_3median = timer.elapsedTime() - prevTime;
-        
-        USE_RANDOM_PIVOT = true;
+			Stopwatch timer = new Stopwatch();
+			double prevTime = timer.elapsedTime();
 
-        prevTime = timer.elapsedTime();
-       
-        sort(random_thousand_array2);
-        using_random_pivot = timer.elapsedTime() - prevTime;
-        System.out.println("using Random pivot took "+ using_random_pivot 
-        + "s , and using 3 median took " + using_3median +"s.");
-        System.out.println();
-        counter = counter*10;
-        }
-		/*
-		 * If you'd like, you can remove these tests once you've tested the code with your randomPivot() method.
-		 */
-		/*sortTest("QUICKSORTEXAMPLE");	
-		sortTest("");
-		sortTest("A");
-		sortTest("bottomupmergesortconsistsofasequenceofpassesoverthewholearray");
-		sortTest("thefirststepinastudyofcomplexityistoestablishamodelofcomputation.generally,researchersstrivetounderstandthesimplestmodelrelevanttoaproblem.");
+			USE_RANDOM_PIVOT = true;
 
-		USE_RANDOM_PIVOT = true;
-		
-		sortTest("QUICKSORTEXAMPLE");	
-		sortTest("");
-		sortTest("A");
-		sortTest("bottomupmergesortconsistsofasequenceofpassesoverthewholearray");
-		sortTest("thefirststepinastudyofcomplexityistoestablishamodelofcomputation.generally,researchersstrivetounderstandthesimplestmodelrelevanttoaproblem.");
-*/
-	}
+			prevTime = timer.elapsedTime();
 
-}
+			sort(random_thousand_array2);
+			using_random_pivot = timer.elapsedTime() - prevTime;
+			System.out.println("\t"+ using_random_pivot);
+			counter = counter*10;
+		    }
+		    counter = 100000;
+		}
 
      /******************************************************************************
       *  Copyright 2002-2020, Robert Sedgewick and Kevin Wayne.
