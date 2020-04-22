@@ -80,44 +80,36 @@ public class Heap {
     	 * Fill in this method! Use the code on p. 316 of the book as a model,
     	 * but change it so each node in the heap has 3 children instead of 2.
     	 */
- 
-	    
+    
     	 while(3*k-1 <= n){
              int l = 3*k-1;
-             if(l<n && less(pq, l, l+1)) {
-            	 if(n == l+1)
-            		 l++;
-            	 else {
-            		 if(less(pq, l,l+2))
-            			 l=l+2;
-            		 else
-            			 l++;
+             if(l<n) {
+            	 if(n >= l+2) {
+        			 if(less(pq, l+1, l+2)) {
+        				 if(less(pq, l, l+2))
+        					 l = l+2;
+            			 }
+        			 else if (less(pq, l , l+1)){
+        				 l = l+1;
+        			 }
             		 
+            	 
             	 }
-            		 
-             }
-             else if(l<n && less(pq, l+1,l)) {
-            	 if(n == l+1) {
-            		 
-            	 }
-            	 else {
-            		 if(less(pq, l, l+2))
-            			 l = l+2;
-            		 
-            			 
-            			 
+            	 else if( n>= l+1) {
+            		 if(less(pq, l, l+1))
+            			 l = l+1;
             	 }
              }
-            
-            	  
-            		 if(less(pq,l,k))
-            			 break;
+           
+             if(!less(pq,k,l)) 
+            	 break;
+            	 
             	 
             		 
              
 
              exch(pq, k,l);
-             k = l+1;
+             k = l;
     	 }
     }
     /***************************************************************************
@@ -200,13 +192,13 @@ public class Heap {
     	  /* These tests are just to get you started. The assignment asks you to
     	   * test your implementation using 100 randomly ordered distinct keys, and you should do that.
     	   * Add the code for those tests in this main() method. */
-  		sortTest("");
-  		sortTest("A");
+  		//sortTest("");
+  		//sortTest("A");
     	
-  		sortTest("HE");
-  		sortTest("HEA");
-  		sortTest("HEAPS");
-  		sortTest("HEAPSORT");
+  		//sortTest("HE");
+  		//sortTest("HEA");
+  		//sortTest("HEAPS");
+  		//sortTest("HEAPSORT");
 		sortTest("HEAPSORTEXAMPLE");
 		sortTest("QUICK");
 		sortTest("QUICKS");
@@ -214,8 +206,8 @@ public class Heap {
 		sortTest("QUICKSORT");
 		sortTest("QUICKSORTEXAMPLE");
 
-		sortTest("bottomupmergesortconsistsofasequenceofpassesoverthewholearray");
-		sortTest("thefirststepinastudyofcomplexityistoestablishamodelofcomputation.generally,researchersstrivetounderstandthesimplestmodelrelevanttoaproblem.");
+		//sortTest("bottomupmergesortconsistsofasequenceofpassesoverthewholearray");
+		//sortTest("thefirststepinastudyofcomplexityistoestablishamodelofcomputation.generally,researchersstrivetounderstandthesimplestmodelrelevanttoaproblem.");
     }
 }
 
