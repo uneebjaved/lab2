@@ -1,6 +1,7 @@
 import java.util.Arrays;
 import java.util.HashSet;
 import edu.princeton.cs.algs4.StdRandom;
+
 /*
   This code is taken from https://algs4.cs.princeton.edu/code/edu/princeton/cs/algs4/Heap.java.html
    and has been modified for CIS 27.
@@ -57,16 +58,38 @@ public class Heap {
          * but change it so each node in the heap has 3 children instead of 2.
          */
         
+        /* 
+         * with every node having a maximum of three children, we divide the length of the tree by 3 and round it up
+         * this allows us to go over each parent-children starting from the bottom-most parent to the root (unless n = 1,
+         * meaning we have only a single node (the root) so there is no need to check if it conforms to the invariant form 
+         * as it is sure to do so)  
+	     */
 	    for (int k = (int) Math.round(n/3.0); k >= 1; k--) {
-	    	
+	    	//for every "for" loop, check if the parent-children rule (the invariant form) is being implemented or not
+	    	//more details in the sink method
 	    	sink(pq, k, n);
 	    }
 	    
+	    //after going over the heap and correcting any keys in the array that do not follow the invariant form
+	    //sort the heap
 	    while (n > 1)
 	    {
-			exch(pq, 1, n--);
+	    	/* 
+	    	 * as per invariant form, the root should currently have the largest key in the heap
+	    	 * and the bottom-most (the last element from the bottom) should have the smallest key in the heap
+	    	 * therefore, we exchange them and reduce n by one to signify that we are going to traverse from the 
+	    	 * last leaf (bottom-most element) back to the root
+			 */
+	    	exch(pq, 1, n--);
+			/* 
+			 * our invariant form has collapsed (we have the smallest key as the parent), so we need to restore it 
+			 * but as mentioned before, n decreases by one, so we do not take any array element with index greater
+			 * than n. this is done because we have made sure that the largest key has been shifted to the bottom in order,
+			 * so we need to only look at the indexes lower than that
+			 */
 			sink(pq, 1, n);
 	    }
+	    //print out the sorted array
 	    show(pq);
     }
     
@@ -80,27 +103,82 @@ public class Heap {
     	 * Fill in this method! Use the code on p. 316 of the book as a model,
     	 * but change it so each node in the heap has 3 children instead of 2.
     	 */
-    
+    	
+    	//for any parent k, we choose its left child as a reference to our operations
     	 while(3*k-1 <= n){
+    		 
+    		 //get the index for the left child
              int l = 3*k-1;
+             
+             //if the left index is less than the length of the array, then it means we have at least a middle child as well 
              if(l < n) {
+            	 
+            	 /* 
+            	  * first we check if the parent has a right child. this works as l+2 refers to the right child of a parent
+            	  * and if it exists, then the length of the heap is minimum l+2. n can be greater than l+2 because we might
+            	  * have a parent after the right child.
+            	  */
             	 if(n >= l+2) {
+            		 
+            		 /*
+            		  * knowing that there is a right child, we definitely know there is a middle child.
+            		  * we check if the middle child's key is less than the right child's
+            		  */
         			 if(less(pq, l+1, l+2)) {
+        				
+        				 //if true, we then check if the left child has a smaller key than the right child        				  
         				 if(less(pq, l, l+2))
+        					 //if true, then we change l to l+2 because that is the highest value child
         					 l = l + 2;
             			 }
+        			 
+        			 /*
+        			  * if the middle child's key is not less than the right child's key, then we check it with the left child
+        			  */
         			 else if (less(pq, l , l+1))
+        				 
+        				 /* 
+        				  * if the left child's value is smaller than the middle child's, then change l to l+1 as the middle child is the 
+        				  * highest value child
+        				  * if this is not true, then we know that the left child is the highest value child so we do not need to change l
+        				  */
         				 l = l + 1;
             	 }
-            	 else if( n >= l + 1) {
+            	 
+            	 /*
+            	  * in the situation where n is not >= l+2, we understand that the parent does not have a right child
+            	  * thus, we check if n equals to l+1, meaning we check is there is a middle child or not
+            	  */
+            	 else if( n == l + 1) {
+            		 
+            		 /*
+            		  * if true, we know that there is a middle child, so now we check if the left child's value is less
+            		  * than the middle child's
+            		  * if true, then we change l to l+1 as the middle child is the greater value child
+            		  * if false, we do not change anything as l is the greater value child
+            		 */
             		 if(less(pq, l, l+ 1))
             			 l = l + 1;
             	 }
              }
+             
+             /*
+              * this checks if the invariant rule: "the value of the parent should be greater than or equal to its children" is 
+              * valid or not
+              * l now points to the greatest value child of the parent. therefore, we check if the parent's value is greater than l
+              * if true, then that means the invariant form is kept and that the parent essentially has a value greater than or equal to
+              * its greatest value child
+              */
              if(!less(pq, k, l)) 
             	 break;
-
+             /*
+              * if invariant form is not kept and our parent has a smaller value than its greatest child, then we need to restore the 
+              * invariant form by exchanging the value of the parent with its greatest value child's
+              */
              exch(pq, k, l);
+             
+             //done to get out of the while loop in the situation that node l does not have any children
+             //if it does, we will check if it follows the invariant form with its children
              k = l;
     	 }
     }
@@ -187,17 +265,23 @@ public class Heap {
     	  /* These tests are just to get you started. The assignment asks you to
     	   * test your implementation using 100 randomly ordered distinct keys, and you should do that.
     	   * Add the code for those tests in this main() method. */
-
+    	  
+    	  //generate a set of type Integer which will contain our random distinct "integer" keys
     	  HashSet<Integer> hset = new HashSet<Integer>();
     	  
+    	  //as long as we do not have 100 distinct keys, we keep finding random keys in the range 0-999 (both inclusive)
+    	  //only add those randomly generated keys that are not in the set already (we need distinct keys)
     	  for(int i = 0; hset.size() != 100; i++) {
-    		  int number = StdRandom.uniform(999);
+    		  int number = StdRandom.uniform(1000);
     		  if(!hset.contains(number)) {
     			  hset.add(number); 
     		  }
     	  }
     	  
+    	  //convert the set generated/formed to an Integer type array
     	  Integer[] toSort = hset.toArray(new Integer[hset.size()]);
+    	  
+    	  //helper function to sort Integer type arrays only
     	  sortHeap(toSort);
     	  
     	  
