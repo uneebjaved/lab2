@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.HashSet;
 
 /*
   This code is taken from https://algs4.cs.princeton.edu/code/edu/princeton/cs/algs4/QuickX.java.html
@@ -217,42 +218,65 @@ public class QuickSort {
 		 * 
 		 * Add helper methods as needed to break up your code.
 		 */
-		int counter = 100000;
-        	double using_random_pivot, using_3median;
-        	QuickSort.INSERTION_SORT_CUTOFF = 10;
-        	for(;QuickSort.INSERTION_SORT_CUTOFF <= 30; QuickSort.INSERTION_SORT_CUTOFF = QuickSort.INSERTION_SORT_CUTOFF +1){
-            		System.out.print(QuickSort.INSERTION_SORT_CUTOFF );
-		    while(counter < 1000000) {
-	//                Integer random_thousand_array1[] = new Integer[counter];
-			Integer random_thousand_array2[] = new Integer[counter];
-			for (int i = 0 ; i < counter; i++){
-	//                    random_thousand_array1[i] = StdRandom.uniform(counter);
-	//                    random_thousand_array2[i] = random_thousand_array1[i];
-			    random_thousand_array2[i] = StdRandom.uniform(counter);
-			}
-	//                USE_RANDOM_PIVOT = false;
-	//
-	//                System.out.println("For N: " + counter);
-	//                System.out.println();
-	//                Stopwatch timer = new Stopwatch();
-	//                double prevTime = timer.elapsedTime();
-	//                sort(random_thousand_array1);
-	//                using_3median = timer.elapsedTime() - prevTime;
+		
+		int counter = 1000000;
+		
 
-			Stopwatch timer = new Stopwatch();
-			double prevTime = timer.elapsedTime();
+        double using_random_pivot;
+        for(int j = 0; j <31; j++) {
+        	INSERTION_SORT_CUTOFF=j;
+        	System.out.print(INSERTION_SORT_CUTOFF + " ");
+        	
+        		HashSet<Integer> hset = new HashSet<Integer>();
+          	  
+        		for(int i = 0; hset.size() != counter; i++) {
+        			int number = StdRandom.uniform(counter);
+        			if(!hset.contains(number)) {
+        				hset.add(number); 
+        			}
+        		}
+          	  
+          	  	Integer[] toSort = hset.toArray(new Integer[hset.size()]);
+          	  	//Integer[] toSort2 = toSort;
+          	  	//USE_RANDOM_PIVOT = false;
+          	  	USE_RANDOM_PIVOT = true;
+          	          
+        		Stopwatch timer = new Stopwatch();
+        		double prevTime = timer.elapsedTime();
+        		sort(toSort);
+        		using_random_pivot = timer.elapsedTime() - prevTime;
+        		
+        		//USE_RANDOM_PIVOT = true;
 
-			USE_RANDOM_PIVOT = true;
+        		//prevTime = timer.elapsedTime();
+       
+        		//sort(toSort2);
+        		//using_random_pivot = timer.elapsedTime() - prevTime;
+        		System.out.println(using_random_pivot);
+        		System.out.println();
+        		
+        	
+        }
+		/*
+		 * If you'd like, you can remove these tests once you've tested the code with your randomPivot() method.
+		 */
+		/*sortTest("QUICKSORTEXAMPLE");	
+		sortTest("");
+		sortTest("A");
+		sortTest("bottomupmergesortconsistsofasequenceofpassesoverthewholearray");
+		sortTest("thefirststepinastudyofcomplexityistoestablishamodelofcomputation.generally,researchersstrivetounderstandthesimplestmodelrelevanttoaproblem.");
 
-			prevTime = timer.elapsedTime();
+		USE_RANDOM_PIVOT = true;
+		
+		sortTest("QUICKSORTEXAMPLE");	
+		sortTest("");
+		sortTest("A");
+		sortTest("bottomupmergesortconsistsofasequenceofpassesoverthewholearray");
+		sortTest("thefirststepinastudyofcomplexityistoestablishamodelofcomputation.generally,researchersstrivetounderstandthesimplestmodelrelevanttoaproblem.");
+*/
+	}
 
-			sort(random_thousand_array2);
-			using_random_pivot = timer.elapsedTime() - prevTime;
-			System.out.println("\t"+ using_random_pivot);
-			counter = counter*10;
-		    }
-		    counter = 100000;
-		}
+}
 
      /******************************************************************************
       *  Copyright 2002-2020, Robert Sedgewick and Kevin Wayne.
