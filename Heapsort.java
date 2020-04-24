@@ -1,9 +1,6 @@
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.math.*;
 import java.util.HashSet;
 import edu.princeton.cs.algs4.StdRandom;
-import java.util.Iterator;
 /*
   This code is taken from https://algs4.cs.princeton.edu/code/edu/princeton/cs/algs4/Heap.java.html
    and has been modified for CIS 27.
