@@ -1,6 +1,9 @@
-
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.math.*;
+import java.util.HashSet;
+import edu.princeton.cs.algs4.StdRandom;
+import java.util.Iterator;
 /*
   This code is taken from https://algs4.cs.princeton.edu/code/edu/princeton/cs/algs4/Heap.java.html
    and has been modified for CIS 27.
@@ -83,32 +86,24 @@ public class Heap {
     
     	 while(3*k-1 <= n){
              int l = 3*k-1;
-             if(l<n) {
+             if(l < n) {
             	 if(n >= l+2) {
         			 if(less(pq, l+1, l+2)) {
         				 if(less(pq, l, l+2))
-        					 l = l+2;
+        					 l = l + 2;
             			 }
-        			 else if (less(pq, l , l+1)){
-        				 l = l+1;
-        			 }
-            		 
-            	 
+        			 else if (less(pq, l , l+1))
+        				 l = l + 1;
             	 }
-            	 else if( n>= l+1) {
-            		 if(less(pq, l, l+1))
-            			 l = l+1;
+            	 else if( n >= l + 1) {
+            		 if(less(pq, l, l+ 1))
+            			 l = l + 1;
             	 }
              }
-           
-             if(!less(pq,k,l)) 
+             if(!less(pq, k, l)) 
             	 break;
-            	 
-            	 
-            		 
-             
 
-             exch(pq, k,l);
+             exch(pq, k, l);
              k = l;
     	 }
     }
@@ -186,29 +181,30 @@ public class Heap {
 		assert(isSorted(charArray));
 	}
 
-	
+	private static void sortHeap(Integer[] toSort) {
+		sort(toSort);
+		assert(isSorted(toSort));
+	}
       public static void main(String[] args) {
     	
     	  /* These tests are just to get you started. The assignment asks you to
     	   * test your implementation using 100 randomly ordered distinct keys, and you should do that.
     	   * Add the code for those tests in this main() method. */
-  		//sortTest("");
-  		//sortTest("A");
-    	
-  		//sortTest("HE");
-  		//sortTest("HEA");
-  		//sortTest("HEAPS");
-  		//sortTest("HEAPSORT");
-		sortTest("HEAPSORTEXAMPLE");
-		sortTest("QUICK");
-		sortTest("QUICKS");
-		sortTest("QUICKSO");
-		sortTest("QUICKSORT");
-		sortTest("QUICKSORTEXAMPLE");
 
-		//sortTest("bottomupmergesortconsistsofasequenceofpassesoverthewholearray");
-		//sortTest("thefirststepinastudyofcomplexityistoestablishamodelofcomputation.generally,researchersstrivetounderstandthesimplestmodelrelevanttoaproblem.");
-    }
+    	  HashSet<Integer> hset = new HashSet<Integer>();
+    	  
+    	  for(int i = 0; hset.size() != 100; i++) {
+    		  int number = StdRandom.uniform(999);
+    		  if(!hset.contains(number)) {
+    			  hset.add(number); 
+    		  }
+    	  }
+    	  
+    	  Integer[] toSort = hset.toArray(new Integer[hset.size()]);
+    	  sortHeap(toSort);
+    	  
+    	  
+      }
 }
 
 /******************************************************************************
