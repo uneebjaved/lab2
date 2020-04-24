@@ -35,7 +35,7 @@ public class Mergesort {
 //
     // You can use the log() method to do debugging-by-printf,
     // and set debug to true or false to turn debug output off or on
-	private static boolean debug = false;
+	private static boolean debug = true;
 	// private static boolean debug = true;
 		
 	private static boolean less(Comparable v1, Comparable v2) {
@@ -119,13 +119,18 @@ public class Mergesort {
 	// subsequence starting at l (which may be null).
         // See the Lab 2 assignment for the definition of a maximal increasing subsequence.
 	private static ListNode findMaximalIncreasingSubsequence(ListNode l) {
-	    
+		
+		if(l == null)
+			return null;
 	    if(l.length()==1){
 	        return l;
 	    }else{
-	        if(l.next().value()<= l.value()){
+	        if(less(l.next().value(),l.value())){
+	        	
 	            return l;
 	        }else{
+	        	
+	        	
 	            return findMaximalIncreasingSubsequence(l.next());
 	        }
 	    }
@@ -133,8 +138,9 @@ public class Mergesort {
 	
     // Sort the list using the natural mergesort algorithm.
 	public static void naturalMergesort(LinkedList l) {
-		int N = l.length();
 
+		int N = l.length();
+		
 		ListNode head = l.head();
 
 		if (N == 0) {
@@ -158,15 +164,21 @@ public class Mergesort {
 
 		// First we have to initialize seq1 and seq2.
 		ListNode headOfSeq1 = head;
+		//log(headOfSeq1.toString());
+		
 		ListNode lastInSeq1 = findMaximalIncreasingSubsequence(headOfSeq1);
+		
 		ListNode headOfSeq2 = lastInSeq1;
 		if (headOfSeq2.length() == 1) {//exception handling
 			return; // This means the list is already sorted
 		} else {
 			headOfSeq2 = headOfSeq2.next(); 
 		}
+		
 		ListNode lastInSeq2 = findMaximalIncreasingSubsequence(headOfSeq2);
-
+		
+		
+		
 		// Now, headOfSeq1 points to the first element in seq1 and lastInSeq1 points to the last element in seq1.
 		// Likewise, headOfSeq2 points to the first element in seq2 and lastInSeq2 points to the last element in seq2.
 		assert(headOfSeq1 != null);
@@ -176,23 +188,22 @@ public class Mergesort {
 
 		// restOfList will point to the beginning of the part of the list that hasn't been explored yet.
 		ListNode restOfList = lastInSeq2.next();
-
-		// As long as lastInSeq2 isn't the last node in the list...
-		while (lastInSeq2.next() != null) {
-
-		        // seq1 should have a non-null beginning and end
+		
+		while (lastInSeq2 != null) {
+			
+		    // seq1 should have a non-null beginning and end
 			assert(headOfSeq1.prev() == null);
 			assert(lastInSeq1.next() == headOfSeq2);
 			// And seq2 should immediately follow seq1
 			assert(headOfSeq2.prev() == lastInSeq1);
-
+			
 			log("first sorted sequence: " + headOfSeq1.toString());
 			log("second sorted sequence: " + headOfSeq2.toString());
 			
 			lastInSeq1.setNext(null);
 			lastInSeq2.setNext(null);
-			
-			if (less(headOfSeq2.value(),headOfSeq1.value())) {//why can't use leq
+
+			if(less(headOfSeq2.value(),headOfSeq1.value())) {
 				ListNode temp = headOfSeq1;
 				headOfSeq1 = headOfSeq2;
 				headOfSeq2 = temp;
@@ -200,39 +211,26 @@ public class Mergesort {
 			
 			merge(headOfSeq1,headOfSeq2);
 			
-			
-			if (restOfList.length() == 1) {
-				merge(headOfSeq1, restOfList);
-				lastInSeq2 = null;
-				break;
-		
-			}
-			else {
-				headOfSeq2 = null;
-				//log("bfr 1 " + headOfSeq1);
-				headOfSeq1.last().setNext(restOfList);
-				//log("bfr 1 " + headOfSeq1);
-				lastInSeq1 = findMaximalIncreasingSubsequence(headOfSeq1);
-				//log("end 1 " + lastInSeq1);
-				headOfSeq2 = lastInSeq1.next();
-				lastInSeq2 = findMaximalIncreasingSubsequence(headOfSeq2);
-				//log("head2 " + headOfSeq2);
-				//log("last2 " + lastInSeq2);
-				//log("rest of " + restOfList);
+			if(restOfList != null) {
 				
+				lastInSeq1 = headOfSeq1.last();
+				headOfSeq2 = null;
+				headOfSeq1.last().setNext(restOfList);
+				restOfList.setPrev(headOfSeq1.last());
+				headOfSeq2 = lastInSeq1.next();	
+				lastInSeq2 = findMaximalIncreasingSubsequence(headOfSeq2);
+				restOfList = lastInSeq2.next(); 
 			}
-			
-			restOfList = lastInSeq2.next();
+			else
+				lastInSeq2 = null;
 		}
-
-
+		
+		
 		// Update the head, since the order may have changed
 		l.setHead(headOfSeq1);
 		assert(l.isSorted());
 	}
 
-	
-	
 	public static void bottomUpMergesort(LinkedList l) {
 		int N = l.length();
 		
@@ -361,10 +359,13 @@ public class Mergesort {
 	}
 	
 	private static void log(String s) {
+		
 		if (debug) {
+			
 			System.out.println(s);
 			System.out.flush();
 		}
+		
 	}
 	
 	private static String sortString(String s) {
@@ -381,6 +382,7 @@ public class Mergesort {
 	}
 	
 	private static void sortTest(String s) {
+		
 		log("unsorted string = " + s);
 		LinkedList l = stringToList(s);
 		String sortedString = sortString(s);
@@ -388,6 +390,7 @@ public class Mergesort {
 		// uncomment out the next line and comment out the call to naturalMergesort
 		//	bottomUpMergesort(l);
 		naturalMergesort(l);
+	
 		log("sorted string = " + sortedString);
 		assert(l.equals(stringToList(sortedString)));
 		assert(l.isSorted());
@@ -421,10 +424,13 @@ public class Mergesort {
 		log(sortedList1.toString());
 		log(sortedList2.toString());
 		log("checking nonempty lists...");
+		
 		merge(sortedList1, sortedList2);
 		log("****result = " + sortedList1.toString());
 		log("reference = " + stringToList("AEEEEGLMMOPRRSTX").toString());
+		
 		assert(sortedList1.equals(stringToList("AEEEEGLMMOPRRSTX")));
+		
 	}
 	
 	public static void main(String[] args) {
