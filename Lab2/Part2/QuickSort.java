@@ -219,41 +219,40 @@ public class QuickSort {
 		 * Add helper methods as needed to break up your code.
 		 */
 		
-		int counter = 1000000;
-		
-
+int counter = 1000000;
         double using_random_pivot;
-        for(int j = 0; j <31; j++) {
-        	INSERTION_SORT_CUTOFF=j;
-        	System.out.print(INSERTION_SORT_CUTOFF + " ");
+
+        while (counter < 10000000) {
         	
+        	for(int j = 0; j <31; j++) {
+        		
+        		INSERTION_SORT_CUTOFF=j;
+        		System.out.print(INSERTION_SORT_CUTOFF + " ");
+
         		HashSet<Integer> hset = new HashSet<Integer>();
-          	  
+
         		for(int i = 0; hset.size() != counter; i++) {
         			int number = StdRandom.uniform(counter);
         			if(!hset.contains(number)) {
         				hset.add(number); 
         			}
         		}
-          	  
-          	  	Integer[] toSort = hset.toArray(new Integer[hset.size()]);
-          	  	//Integer[] toSort2 = toSort;
-          	  	//USE_RANDOM_PIVOT = false;
-          	  	USE_RANDOM_PIVOT = true;
-          	          
+
+        		Integer[] toSort = hset.toArray(new Integer[hset.size()]);
+        		
+        		
         		Stopwatch timer = new Stopwatch();
         		double prevTime = timer.elapsedTime();
         		sort(toSort);
         		using_random_pivot = timer.elapsedTime() - prevTime;
-        		
-        		//USE_RANDOM_PIVOT = true;
 
-        		//prevTime = timer.elapsedTime();
-       
-        		//sort(toSort2);
-        		//using_random_pivot = timer.elapsedTime() - prevTime;
+        		
         		System.out.println(using_random_pivot);
         		System.out.println();
+
+
+        	}
+        	counter *= 10;
         		
         	
         }
