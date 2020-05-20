@@ -128,6 +128,7 @@ public class Heap {
         				
         				 //if true, we then check if the left child has a smaller key than the right child        				  
         				 if(less(pq, l, l+2))
+        					 
         					 //if true, then we change l to l+2 because that is the highest value child
         					 l = l + 2;
             			 }
