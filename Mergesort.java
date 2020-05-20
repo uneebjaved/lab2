@@ -1,4 +1,9 @@
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
+
+import edu.princeton.cs.algs4.StdRandom;
+import edu.princeton.cs.algs4.Stopwatch;
 
 /*
 Your task is to implement natural mergesort.
@@ -41,8 +46,8 @@ public class Mergesort {
 	private static boolean less(Comparable v1, Comparable v2) {
 		return v1.compareTo(v2) < 0;
 	}
-	
-
+	private static int counter = 0;
+	private static int counter2 = 0;
 	// Merges the right sorted linked list into the left sorted
 	// linked list. (Returns the list containing all of the sorted
 	// elements; this will either be <left> or <right>, as no new
@@ -62,16 +67,19 @@ public class Mergesort {
 			// Both are non-empty; find which head element is smaller			
 			int leftLen = left.length();
 			int rightLen = right.length();
-			log("merging " + left.toString() + " and " + right.toString());
+			//log("merging " + left.toString() + " and " + right.toString());
 			Comparable leftVal = left.value();
 			Comparable rightVal = right.value();
 			ListNode head, newLeft, newRight;
+
 			if (less(rightVal, leftVal)) {
 				// The result list will be:
 				// right.head, followed by the result of merging right.tail with left
+				
 				head = right;
 				newLeft = right.next();
 				newRight = left;				
+				
 			} else {
 				// The result list will be:
 				// left.head, followed by the result of merging left.tail with right
@@ -128,13 +136,14 @@ public class Mergesort {
 	    }
 	    //if list has more than a single node then
 	    else{
+	    	//counter++;
 	    	//check if our next nodes value is smaller than our current nodes value. if so, return the node that we currently have
 	        if(less(l.next().value(),l.value())){
 	            return l;
 	        }
 	        //if the value of the next node is not smaller, then using recursion to go over the next part of the nodes.
 	        else{
-
+	        	
 	            return findMaximalIncreasingSubsequence(l.next());
 	        }
 	    }
@@ -212,11 +221,15 @@ public class Mergesort {
 			
 			//check if the head of seq1 is smaller than seq2
 			//if not, seq1 and seq2 switch
-			//this is done as merge assumes that the head of seq1 will be smaller than head of seq2 but this might not be the case while sorting
+			//this is done as when the head of seq1 is smaller than head of seq2, merge assumes otherwise and removes the head of seq2 instead of
+			//applying merge correctly (this can be checked if the code is ran without the below if statement--we will get a wrongly sorted list)
+			//when applying merge upon two nodes, the merge method does not swap the two and so it is done here
 			if(less(headOfSeq2.value(),headOfSeq1.value())) {
+				
 				ListNode temp = headOfSeq1;
 				headOfSeq1 = headOfSeq2;
 				headOfSeq2 = temp;
+				
 			}
 			
 			//merge the two sequences generated
@@ -238,9 +251,8 @@ public class Mergesort {
 			//can also be done using break but this is a more "systematic" method
 			else
 				lastInSeq2 = null;
+			
 		}
-		
-		
 		// Update the head, since the order may have changed
 		l.setHead(headOfSeq1);
 		assert(l.isSorted());
@@ -449,12 +461,25 @@ public class Mergesort {
 	}
 	
 	public static void main(String[] args) {
-		testMerge();
+		testMerge();		
+		
+		//added to check completed sorted string and the opposite of that
+		sortTest("9876543210");
+		sortTest("0123456789");
+		sortTest("abcdefghijklmnopqrstuvwxyz");
+		sortTest("zyxwvutsrqponmlkjihgfedcba");
 		
 		sortTest("MERGESORTEXAMPLE");	
-		sortTest("");
-		sortTest("A");
+		sortTest("APPLE");
+		sortTest("bottomup");
 		sortTest("bottomupmergesortconsistsofasequenceofpassesoverthewholearray");
 		sortTest("thefirststepinastudyofcomplexityistoestablishamodelofcomputation.generally,researchersstrivetounderstandthesimplestmodelrelevanttoaproblem.");
+		
+		//added random tests
+		sortTest("oa;wueghawekghbae;irgb.akgberq");
+		sortTest("qtgwEFQgZSRXTDJYKFCUTMHNBgeHRSZJTDXYFKCMHNGBegRHTJXYMGHXNGDHREATR");
+		sortTest("wuefhlkwefiusgbse;visuVBdKJVBREIYHVDJQWIFGR;OGNSDJVBWRGHWEFBEK;gbkjbcavsfbfkvhabdfvhrbsdbfweofEWFJEBSK.JVSDVBSK");
+		sortTest("laCKUvcfxyktfuylgjvCDYTFUYJVHG57645656toiyghvgcdr65r76UT3lkj8E5W3W5");
+        	
 	}
 }
