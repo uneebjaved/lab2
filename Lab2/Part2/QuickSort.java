@@ -209,7 +209,6 @@ public class QuickSort {
 
 	public static void main(String[] args) {
 		
-		
 		/*
 		 * You will need to add code here to:
 		 * - Call sort() with different pivot strategies and different values of INSERTION_SORT_CUTOFF
@@ -219,60 +218,54 @@ public class QuickSort {
 		 * Add helper methods as needed to break up your code.
 		 */
 		
-int counter = 1000000;
+		int counter = 1000;
         double using_random_pivot;
-
+        
+        //run random set code for 1000, 10000, 100000, and 1000000
         while (counter < 10000000) {
         	
+        	//for insertion cutoff 0 to 30
         	for(int j = 0; j <31; j++) {
         		
-        		INSERTION_SORT_CUTOFF=j;
-        		System.out.print(INSERTION_SORT_CUTOFF + " ");
+        		INSERTION_SORT_CUTOFF = j;
+        		//below comment is for interactive purposes
+        		//System.out.print(INSERTION_SORT_CUTOFF + " ");
 
+        		//hash set to be filled with the counter number of distinct random integers
         		HashSet<Integer> hset = new HashSet<Integer>();
-
+        		
+        		//fill in "counter" (N) number random integers that are not in the hash set already
         		for(int i = 0; hset.size() != counter; i++) {
         			int number = StdRandom.uniform(counter);
         			if(!hset.contains(number)) {
         				hset.add(number); 
         			}
         		}
-
+        		
+        		//make an array of the hash set of distinct random integers
         		Integer[] toSort = hset.toArray(new Integer[hset.size()]);
         		
-        		
+        		//keep a track of the time spent
         		Stopwatch timer = new Stopwatch();
         		double prevTime = timer.elapsedTime();
+        		
+        		//sort the required array
         		sort(toSort);
+        		
+        		//calculate the elapsed time
         		using_random_pivot = timer.elapsedTime() - prevTime;
 
         		
         		System.out.println(using_random_pivot);
-        		System.out.println();
+        		//below comment is for interactive purposes
+        		//System.out.println();
 
 
         	}
+        	//multiply counter by 10 to get on to the next value of N 
         	counter *= 10;
-        		
-        	
         }
-		/*
-		 * If you'd like, you can remove these tests once you've tested the code with your randomPivot() method.
-		 */
-		/*sortTest("QUICKSORTEXAMPLE");	
-		sortTest("");
-		sortTest("A");
-		sortTest("bottomupmergesortconsistsofasequenceofpassesoverthewholearray");
-		sortTest("thefirststepinastudyofcomplexityistoestablishamodelofcomputation.generally,researchersstrivetounderstandthesimplestmodelrelevanttoaproblem.");
 
-		USE_RANDOM_PIVOT = true;
-		
-		sortTest("QUICKSORTEXAMPLE");	
-		sortTest("");
-		sortTest("A");
-		sortTest("bottomupmergesortconsistsofasequenceofpassesoverthewholearray");
-		sortTest("thefirststepinastudyofcomplexityistoestablishamodelofcomputation.generally,researchersstrivetounderstandthesimplestmodelrelevanttoaproblem.");
-*/
 	}
 
 }
