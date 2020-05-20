@@ -202,7 +202,7 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 		}
 
 		root = put(root, key, val);
-		//after inserting a new node, if our roots color is black, then we want to increase the blackheight or else, keep it as it is
+		//after inserting a new node, if our roots color is black, then we want to increase the blackheight or else leave it as it is
 		if (root.color == BLACK)
 			blackHeight++;
 		root.color = BLACK;
@@ -240,8 +240,8 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 	 ***************************************************************************/
 
 	private void fixupRoot() {
-		// if both children of root are black, set root to red
-		//this also decreases the blackheight of the tree we are looking at so fix that
+		//if both children of root are black, set root to red
+		//this also decreases the blackheight of the tree we are looking at so fix that by decreasing the blackHeight value
 		if (!isRed(root.left) && !isRed(root.right)) {
 			blackHeight--;
 			root.color = RED;
@@ -384,7 +384,9 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 		blackHeight = Math.max(this.blackHeight, t.blackHeight);
 
 		root = fixup(root);
+		//if roots color is red after confirming invariant form then increasing the blackHeight and change the color to black
 		if (root.color == RED) {
+			blackHeight++;
 			root.color = BLACK;
 		}
 
@@ -400,13 +402,15 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 		if (h == null) {
 			return null;
 		}
+		h.left = fixup(h.left);
+		h.right = fixup(h.right);
 		if (isRed(h.right) && !isRed(h.left))
 			h = rotateLeft(h);
 		if (isRed(h.left) && isRed(h.left.left))
 			h = rotateRight(h);
 		if (isRed(h.left) && isRed(h.right))
 			flipColors(h);
-
+		
 		return h;
 	}
 
@@ -555,7 +559,11 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 			 * TODO: Fill in this code! What to we do if the right child is null?
 			 * Hint: Use recursion.
 			 */
-			/*find height of left subtree and recursively find the largest key in it*/
+			/*
+			 *if right is null then we should traverse through the left child
+			 *we find height of left subtree and recursively find the largest key in it
+			 *
+			 */
 			int child_height = parentsBlackHeight;
 			if(parent.left.color == BLACK)
 				child_height = parentsBlackHeight - 1;
@@ -566,7 +574,10 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 			 * TODO: Fill in this code! What to we do if the right child is non-null?
 			 * Hint: Use recursion.
 			 */
-			/*find height of right subtree and recursively find the largest key in it*/
+			/*if if both left and child aren't null and right isn't null, then to find the largest key in the tree, we should traverse
+			 *through the right subtree
+			 *we find height of right subtree and recursively find the largest key in it
+			 */
 			int child_height = parentsBlackHeight;
 			if(parent.left.color == BLACK)
 				child_height = parentsBlackHeight - 1;
@@ -747,7 +758,7 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 
 		int SIZE1 = 7;
 		int SIZE2 = 5;
-		//for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 100; i++) {
 		RedBlackBST<Integer, String> st1 = new RedBlackBST<Integer, String>();
 		int[] ints1 = { 1, 14, 27, 19, 12, 10, 28 };
 		for (int j = 0; j < SIZE1; j++) {
@@ -778,7 +789,7 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 		// t2.printTree(t2);
 
 		testJoin(st1, k, s, t2);
-		//}
+		}
 
 
 	}
@@ -786,7 +797,7 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 	private static void bigJoinTest() {
 		int SIZE1 = 16;
 		int SIZE2 = SIZE1;
-		//for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 100; i++) {
 		// test join: first create a random tree with integer keys
 		RedBlackBST<Integer, String> st1 = new RedBlackBST<Integer, String>();
 
@@ -820,7 +831,7 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 		// t2.printTree(t2);
 
 		testJoin(st1, k, s, t2);
-		//}
+		}
 	}
 
 	private static void testFindBlackNode1() {
@@ -1180,12 +1191,12 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 	 */
 	public static void main(String[] args) {
 
-		testFindBlackNode1();
+		//testFindBlackNode1();
 
 		/* Add other tests for join() here if you like */
 
 		smallJoinTest();
-		bigJoinTest();
+		//bigJoinTest();
 	}
 }
 
