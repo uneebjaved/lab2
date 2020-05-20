@@ -3,7 +3,7 @@
    and has been modified for CIS 27.
 
 - Tim Chevalier
-*/
+ */
 /*
  * For Lab 3:
  * - You will be changing code between lines 355-776, and possibly the main() method.
@@ -51,7 +51,6 @@
  ******************************************************************************/
 
 import edu.princeton.cs.algs4.StdIn;
-
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.Queue;
@@ -203,20 +202,17 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 		}
 
 		root = put(root, key, val);
+		//after inserting a new node, if our roots color is black, then we want to increase the blackheight or else, keep it as it is
 		if (root.color == BLACK)
 			blackHeight++;
 		root.color = BLACK;
-		//blackHeight = findBlackHeightOfNode(root);
-		//StdOut.println("New:");
-		//StdOut.println("Height: " + blackHeight);
-		//printTree(this);
-		//StdOut.println();
+
 		assert (check());
 	}
 
 	// insert the key-value pair in the subtree rooted at h
 	private Node put(Node h, Key key, Value val) {
-		
+
 		if (h == null)
 			return new Node(key, val, RED); // Does not change black height
 		int cmp = key.compareTo(h.key);
@@ -230,29 +226,11 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 		// fix-up any right-leaning links
 		if (isRed(h.right) && !isRed(h.left))
 			h = rotateLeft(h);
-		//StdOut.println("h bfr rotate: " + h.key);
-		//StdOut.println("h afr rotate: " + h.key);
+		
 		if (isRed(h.left) && isRed(h.left.left))
 			h = rotateRight(h);
 		if (isRed(h.left) && isRed(h.right))
 			flipColors(h);
-		/*if(h.left != null && h.right != null)
-		{
-			
-			StdOut.println("Color of 33: " + h.left.key);
-			StdOut.println("Color of 39: " + h.right.key);
-		}*/
-		//root = h;
-		//if (isRed(h.left) && isRed(h.right))
-			//blackHeight = findBlackHeightOfNode(h);
-			//"e.g. root.key == h.key"
-			
-		
-		
-		//if (blackHeight != findBlackHeightOfNode(h) && h.left != null && h.right != null)
-		//	blackHeight++;
-		//if(max() == h.key)
-			//blackHeight++;
 		
 		return h;
 	}
@@ -263,6 +241,7 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 
 	private void fixupRoot() {
 		// if both children of root are black, set root to red
+		//this also decreases the blackheight of the tree we are looking at so fix that
 		if (!isRed(root.left) && !isRed(root.right)) {
 			blackHeight--;
 			root.color = RED;
@@ -403,12 +382,12 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 
 		root = joinHelper(k, v, t);
 		blackHeight = Math.max(this.blackHeight, t.blackHeight);
-		
+
 		root = fixup(root);
 		if (root.color == RED) {
 			root.color = BLACK;
 		}
-		
+
 		//StdOut.println("after join and fixup, this = " + this);
 		//printTree(this);
 		//StdOut.println("new size = " + size() + " old size1 = " + oldSize1 + " old size2 = " + oldSize2);
@@ -417,19 +396,19 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 		assert (check());
 	}
 
-    private Node fixup(Node h) {
-    	if (h == null) {
-    		return null;
-    	}
-    	if (isRed(h.right) && !isRed(h.left))
+	private Node fixup(Node h) {
+		if (h == null) {
+			return null;
+		}
+		if (isRed(h.right) && !isRed(h.left))
 			h = rotateLeft(h);
-    	if (isRed(h.left) && isRed(h.left.left))
+		if (isRed(h.left) && isRed(h.left.left))
 			h = rotateRight(h);
 		if (isRed(h.left) && isRed(h.right))
 			flipColors(h);
 
-        return h;
-    }
+		return h;
+	}
 
 	private Node joinHelper(Key k, Value v, RedBlackBST<Key, Value> t) {
 
@@ -442,8 +421,7 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 		 * or t has a larger black height than this, so we find a node in t
 		 * whose black height equals this's black height
 		 */
-		//StdOut.println("Height of this: " + findBlackHeight() + " " + blackHeight);
-		//StdOut.println("Height of t: " + findBlackHeightOfNode(t.root) + " " + t.blackHeight);
+		
 		if (blackHeight >= t.blackHeight) {
 			tIsTaller = false;
 			y = findBlackNodeWithLargestKey(t.blackHeight);
@@ -451,8 +429,8 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 			y = t.findBlackNodeWithSmallestKey(blackHeight);
 		}
 
-	//	StdOut.println("y = " + y.key + ", k = " + k + " this.blackHeight = " + blackHeight + " and t.blackHeight is "
-	//			+ t.blackHeight);
+		//	StdOut.println("y = " + y.key + ", k = " + k + " this.blackHeight = " + blackHeight + " and t.blackHeight is "
+		//			+ t.blackHeight);
 		//StdOut.print(y);
 		Node y_left = y.left;
 		Node y_right = y.right;
@@ -461,51 +439,49 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 		boolean y_color = y.color;
 
 		Node result = null;
-		
+
 		// Two cases: either k >= y.key and k <= t.min(),
 		// or k >= t.max() and k <= y.key
 
 		if (!tIsTaller) {
-		
+
 			assert (k.compareTo(y.key) >= 0 && k.compareTo(t.min()) <= 0);
-			
-		/*
-		 * TODO: Fill in this code! Transform y, t, and root to produce a tree
-		 * that has all the keys in this, all the keys in t, and also k.
-		 */
+
+			/*
+			 * TODO: Fill in this code! Transform y, t, and root to produce a tree
+			 * that has all the keys in this, all the keys in t, and also k.
+			 */
+			//if our second tree (t) is not taller, we make our node y, the new node k and make its left child the original node y and attach
+			// back the children of the original node y to this new node. the right child of the node with value k becomes the second tree (t)
 			y.key = k;
 			y.val = v;
 			y.right = t.root;
 			y.left = new Node(y_key,y_value,y_color);
 			y.left.left = y_left;
 			y.left.right = y_right;
-			
+
 			result = root;
-			
-			
-			
+
 		} else {
 			assert (k.compareTo(y.key) <= 0 && k.compareTo(max()) >= 0);
 			/*
 			 * TODO: Fill in this code! Transform y, t, and root to produce a tree
 			 * that has all the keys in this, all the keys in t, and also k.
 			 */	
+			//if our second tree (t) is taller, we make our node y, the new node k and make its left child the first tree (the root) and its right
+			//child becomes the original node y and then we attach back the children of the original node y to this newly generated node.
 			y.key = k;
 			y.val = v;
 			y.left = root;
 			y.right = new Node(y_key,y_value,y_color);
 			y.right.right = y_right;
 			y.right.left = y_left;
-			
+
 			result = t.root;
-				
+
 		}
-		
-		// StdOut.println("after join, y = " + y.key);
-		// StdOut.println("after join, this = " + this);
-		//printTree(this);
 		y.color = RED;
-		
+
 		assert(result != null);
 		return result;
 
@@ -518,7 +494,7 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 	 * the one with the largest key.
 	 */
 	private Node findBlackNodeWithLargestKey(int black_height) {
-			// StdOut.println("black height of root = " + black_height);
+		// StdOut.println("black height of root = " + black_height);
 		assert (black_height <= blackHeight);
 		if (blackHeight == black_height) {
 			// In this case, we should return the root, since the only possible other key
@@ -558,15 +534,14 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 		StdOut.println("The tree rooted at " + parent.key + " has black height " + parentsBlackHeight
 				+ ".\nSearching for a subtree with black height " + black_height);
 		 */
-		
+
 		Node result = null;
-		
+
 		// this must be the node with the greatest black height in this case --
 		// the right child has lower black height and the left child must be smaller
 		if (parentsBlackHeight == black_height) {
 			result = parent;
 			return result;
-			//ask professor if this is ok/needed
 		}
 
 		if (parent.left == null && parent.right == null) {
@@ -585,10 +560,7 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 			if(parent.left.color == BLACK)
 				child_height = parentsBlackHeight - 1;
 			result = findBlackNodeWithLargestKey(parent.left, child_height, black_height);
-			//Node x = parent;
-			//while (x.left != result.key)
-				//x = x.left;
-			//x.left = null;
+
 		} else {
 			/*
 			 * TODO: Fill in this code! What to we do if the right child is non-null?
@@ -599,10 +571,6 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 			if(parent.left.color == BLACK)
 				child_height = parentsBlackHeight - 1;
 			result = findBlackNodeWithLargestKey(parent.right, child_height, black_height);
-			//Node x = parent;
-			//while (x.right != result.key)
-				//x = x.right;
-			//x.right = null;
 		}
 		assert(result != null);
 		return result;
@@ -618,9 +586,9 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 		StdOut.println("(smallest) The tree rooted at " + parent.key + " has black height " + parentsBlackHeight
 				+ ".\nSearching for a subtree with black height " + black_height);
 		 */
-		
+
 		Node result = null;
-		
+
 		// This must be the smallest black node whose black height is black_height,
 		// because if there is a left child, that node is either red; or it's
 		// black but has black height black_height - 1
@@ -640,103 +608,104 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 			 * TODO: Fill in this code! What to we do if the left child is null?
 			 * Hint: Use recursion.
 			 */
+			
+			//we want to look at the right child of the parent node in this case
+			//we initialize the correct black height of the right child node and recursively traverse through the right child subtree
+			//to find the smallest key if it exists in its subtree
 			int child_height = parentsBlackHeight;
 			if(parent.left.color == BLACK)
 				child_height = parentsBlackHeight - 1;
 			result = findBlackNodeWithSmallestKey(parent.right, child_height, black_height);
-			//Node x = parent;
-			//while (x.right != result.key)
-			//	x = x.right;
-			//x.right = null;
+			
 		} else {
 			/*
 			 * TODO: Fill in this code! What to we do if the left child is non-null?
 			 * Hint: Use recursion.
 			 */
+			
+			//we want to look at the left child of the parent node in this case
+			//we initialize the correct black height of the right child node and recursively traverse through the left child subtree
+			//to find the smallest key if it exists in its subtree
 			int child_height = parentsBlackHeight;
 			if(parent.left.color == BLACK)
 				child_height = parentsBlackHeight - 1;
 			result = findBlackNodeWithSmallestKey(parent.left, child_height, black_height);
-			//Node x = parent;
-			//while (x.left != result.key)
-			//	x = x.left;
-			//x.left = null;
 		}
 		assert(result != null);
 		return result;
 	}
-	
-	// testing only
-		private void testFindBlackNode() {
-			// build table from black height -> node
-			// then for each possible black height <= the entire tree's black height, check
-			// that findBlackNodeWithLargestKey() returns the right
-			// node as per the table
 
-			testFindBlackNode(root);
+	// testing only
+	private void testFindBlackNode() {
+		// build table from black height -> node
+		// then for each possible black height <= the entire tree's black height, check
+		// that findBlackNodeWithLargestKey() returns the right
+		// node as per the table
+
+		testFindBlackNode(root);
+	}
+
+	// testing only
+	@SuppressWarnings("unchecked")
+	private void testFindBlackNode(Node root) {
+		if (root == null) {
+			return;
 		}
 
-		// testing only
-		@SuppressWarnings("unchecked")
-		private void testFindBlackNode(Node root) {
-			if (root == null) {
-				return;
-			}
+		HashMap<Node, Integer> blackHeightTable = new HashMap<Node, Integer>();
+		buildTable(root, blackHeightTable);
 
-			HashMap<Node, Integer> blackHeightTable = new HashMap<Node, Integer>();
-			buildTable(root, blackHeightTable);
+		int blackHeightForThisNode = blackHeightTable.get(root);
 
-			int blackHeightForThisNode = blackHeightTable.get(root);
+		// StdOut.println("node = " + root.key.toString() + " black height = " + blackHeightForThisNode);
 
-			// StdOut.println("node = " + root.key.toString() + " black height = " + blackHeightForThisNode);
+		// for each bh from 0 to blackHeightForThisNode:
+		// call findBlackNodeWithLargestKey(bh);
+		// check the result against the table
+		for (int bh = 1; bh <= blackHeightForThisNode; bh++) {
+			// find the answer using the method that we're testing,
+			// findBlackNodeWithLargestKey()
+			Node blackNodeWithLargestKey = findBlackNodeWithLargestKey(root, blackHeightForThisNode, bh);
+			Key k;
+			if (blackNodeWithLargestKey != null)
+				k = blackNodeWithLargestKey.key;
+			else k = null;
+			//StdOut.println(
+			//		"in the tree rooted at " + root.key + " the largest node with black height " + bh + " is " + k);
 
-			// for each bh from 0 to blackHeightForThisNode:
-			// call findBlackNodeWithLargestKey(bh);
-			// check the result against the table
-			for (int bh = 1; bh <= blackHeightForThisNode; bh++) {
-				// find the answer using the method that we're testing,
-				// findBlackNodeWithLargestKey()
-				Node blackNodeWithLargestKey = findBlackNodeWithLargestKey(root, blackHeightForThisNode, bh);
-				Key k;
-				if (blackNodeWithLargestKey != null)
-					k = blackNodeWithLargestKey.key;
-				else k = null;
-				//StdOut.println(
-				//		"in the tree rooted at " + root.key + " the largest node with black height " + bh + " is " + k);
+			// StdOut.println("bh = " + bh + " key = " + k.toString());
 
-				// StdOut.println("bh = " + bh + " key = " + k.toString());
+			// find the answer using the table (all nodes with this black height), then
+			// make sure each of those nodes has a key <= k
 
-				// find the answer using the table (all nodes with this black height), then
-				// make sure each of those nodes has a key <= k
-
-				for (Map.Entry<Node, Integer> pair : blackHeightTable.entrySet()) {
-					if (((Integer) pair.getValue()) == bh) {
-						Node n = (Node) pair.getKey();
-						// StdOut.println("node " + n.key + " has black height " + bh);
-						assert (k.compareTo(n.key) >= 0);
-					}
+			for (Map.Entry<Node, Integer> pair : blackHeightTable.entrySet()) {
+				if (((Integer) pair.getValue()) == bh) {
+					Node n = (Node) pair.getKey();
+					// StdOut.println("node " + n.key + " has black height " + bh);
+					assert (k.compareTo(n.key) >= 0);
 				}
 			}
 		}
+	}
 
-		// testing only
-		private void buildTable(Node r, HashMap<Node, Integer> blackHeightTable) {
-			// for each node in the tree: map node -> black height
+	// testing only
+	private void buildTable(Node r, HashMap<Node, Integer> blackHeightTable) {
+		// for each node in the tree: map node -> black height
 
-			if (r == null) {
-				return;
-			}
-
-			blackHeightTable.put(r, findBlackHeightOfNode(r));
-
-			if (r.left != null) {
-				buildTable(r.left, blackHeightTable);
-			}
-			if (r.right != null) {
-				buildTable(r.right, blackHeightTable);
-			}
-
+		if (r == null) {
+			return;
 		}
+
+		blackHeightTable.put(r, findBlackHeightOfNode(r));
+
+		if (r.left != null) {
+			buildTable(r.left, blackHeightTable);
+		}
+		if (r.right != null) {
+			buildTable(r.right, blackHeightTable);
+		}
+
+	}
 
 	private static String randomString() {
 		String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
@@ -750,7 +719,7 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 	}
 
 	private static void testJoin(RedBlackBST<Integer, String> t1, Integer k, String s,
-		RedBlackBST<Integer, String> t2) {
+			RedBlackBST<Integer, String> t2) {
 		int oldSize = t1.size();
 		int oldSize2 = t2.size();
 		t1.join(k, s, t2);
@@ -779,75 +748,78 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 		int SIZE1 = 7;
 		int SIZE2 = 5;
 		//for (int i = 0; i < 100; i++) {
-			RedBlackBST<Integer, String> st1 = new RedBlackBST<Integer, String>();
-			int[] ints1 = { 1, 14, 27, 19, 12, 10, 28 };
-			for (int j = 0; j < SIZE1; j++) {
-				Integer v = ints1[j];
-				StdRandom.uniform(0, 30);
-				st1.put(v, randomString());
-				// StdOut.println("st1 putting " + v);
-			}
-			
-			// find maxKey + 1
-			Integer k = st1.max() + 1;
-			String s = randomString();
-			// StdOut.println("finished building st1, k = " + k + " size = " + st1.size());
-			// now construct a random tree with keys > k
-			
-			RedBlackBST<Integer, String> t2 = new RedBlackBST<Integer, String>();
-			int[] ints2 = { 39, 33, 37, 31, 32 };
-			for (int j = 0; j < SIZE2; j++) {
-				Integer v = ints2[j];
-				t2.put(v, randomString());
-				// StdOut.println("t2 putting " + v);
-			}
-			
-			// StdOut.println("finished building t2, about to call testJoin, size = " +
-			// t2.size());
-			// st1.printTree(st1);
-			// StdOut.println("t2 = " + t2);
-			// t2.printTree(t2);
-			testJoin(st1, k, s, t2);
+		RedBlackBST<Integer, String> st1 = new RedBlackBST<Integer, String>();
+		int[] ints1 = { 1, 14, 27, 19, 12, 10, 28 };
+		for (int j = 0; j < SIZE1; j++) {
+			Integer v = ints1[j];
+			StdRandom.uniform(0, 30);
+			st1.put(v, randomString());
+			// StdOut.println("st1 putting " + v);
+		}
+
+		// find maxKey + 1
+		Integer k = st1.max() + 1;
+		String s = randomString();
+		// StdOut.println("finished building st1, k = " + k + " size = " + st1.size());
+		// now construct a random tree with keys > k
+
+		RedBlackBST<Integer, String> t2 = new RedBlackBST<Integer, String>();
+		int[] ints2 = { 39, 33, 37, 31, 32 };
+		for (int j = 0; j < SIZE2; j++) {
+			Integer v = ints2[j];
+			t2.put(v, randomString());
+			// StdOut.println("t2 putting " + v);
+		}
+
+		// StdOut.println("finished building t2, about to call testJoin, size = " +
+		// t2.size());
+		// st1.printTree(st1);
+		// StdOut.println("t2 = " + t2);
+		// t2.printTree(t2);
+
+		testJoin(st1, k, s, t2);
 		//}
-			
+
 
 	}
 
 	private static void bigJoinTest() {
-		int SIZE1 = 100;
+		int SIZE1 = 16;
 		int SIZE2 = SIZE1;
 		//for (int i = 0; i < 100; i++) {
-			// test join: first create a random tree with integer keys
-			RedBlackBST<Integer, String> st1 = new RedBlackBST<Integer, String>();
+		// test join: first create a random tree with integer keys
+		RedBlackBST<Integer, String> st1 = new RedBlackBST<Integer, String>();
 
-			for (int j = 0; j < SIZE1; j++) {
-				Integer v = StdRandom.uniform(0, 1000);
-				st1.put(v, randomString());
-				// StdOut.println("st1 putting " + v);
-			}
-			//StdOut.println("st1 " + st1.root.key + " " + st1.root.left.key);
-			// find maxKey + 1
-			Integer k = st1.max() + 1;
-			String s = randomString();
-			
-			// StdOut.println("finished building st1, k = " + k + " size = " + st1.size());
-			// now construct a random tree with keys > k
-			RedBlackBST<Integer, String> t2 = new RedBlackBST<Integer, String>();
+		for (int j = 0; j < SIZE1; j++) {
+			Integer v = StdRandom.uniform(0, 1000);
+			st1.put(v, randomString());
+			// StdOut.println("st1 putting " + v);
+		}
 
-			for (int j = 0; j < SIZE2; j++) {
-				Integer v = StdRandom.uniform(k + 1, 2000);
-				
-				t2.put(v, randomString());
-				// StdOut.println("t2 putting " + v);
-			}
-			//StdOut.println("t2 " +t2.root.key + " " + t2.root.left.key);
-			
-			// StdOut.println("finished building t2, about to call testJoin, size = " +
-			// t2.size());
-			// st1.printTree(st1);
-			// StdOut.println("t2 = " + t2);
-			// t2.printTree(t2);
-			testJoin(st1, k, s, t2);
+		//StdOut.println("st1 " + st1.root.key + " " + st1.root.left.key);
+		// find maxKey + 1
+		Integer k = st1.max() + 1;
+		String s = randomString();
+
+		// StdOut.println("finished building st1, k = " + k + " size = " + st1.size());
+		// now construct a random tree with keys > k
+		RedBlackBST<Integer, String> t2 = new RedBlackBST<Integer, String>();
+
+		for (int j = 0; j < SIZE2; j++) {
+			Integer v = StdRandom.uniform(k + 1, 2000);
+
+			t2.put(v, randomString());
+			// StdOut.println("t2 putting " + v);
+		}
+		//StdOut.println("t2 " +t2.root.key + " " + t2.root.left.key);
+
+		// StdOut.println("finished building t2, about to call testJoin, size = " +
+		// t2.size());
+		// st1.printTree(st1);
+		// StdOut.println("t2 = " + t2);
+		// t2.printTree(t2);
+
+		testJoin(st1, k, s, t2);
 		//}
 	}
 
@@ -921,7 +893,7 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 		return h;
 	}
 
-	// Assuming that h is red and both h.right and h.right.left
+	// Assuming that h is red and both h.right and h.right.left		
 	// are black, make h.right or one of its children red.
 	private Node moveRedRight(Node h) {
 		assert (h != null);
@@ -995,108 +967,108 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 	}
 
 	/**
-		 * Return the key in the symbol table of a given {@code rank}. This key has the
-		 * property that there are {@code rank} keys in the symbol table that are
-		 * smaller. In other words, this key is the ({@code rank}+1)st smallest key in
-		 * the symbol table.
-		 *
-		 * @param rank the order statistic
-		 * @return the key in the symbol table of given {@code rank}
-		 * @throws IllegalArgumentException unless {@code rank} is between 0 and
-		 *                                  <em>n</em>–1
-		 */
-	
-	  public Key select(int rank) {
-		  	if (rank < 0 || rank >= size()) { 
-		  		throw new  IllegalArgumentException("argument to select() is invalid: " + rank);
-		  	}
-		  	return select(root, rank);
-	  }
-	  
-	  // Return key in BST rooted at x of given rank. 
-	  // Precondition: rank is in legal range. 
-	  private Key select(Node x, int rank) {
-		  if (x == null) return null;
-		  int leftSize = size(x.left);
-		  if (leftSize > rank) return select(x.left, rank); 
-		  else if (leftSize < rank) return select(x.right, rank - leftSize - 1);
-	  else return x.key;
-		  }
-	  
-	 /**
-		 * Return the number of keys in the symbol table strictly less than {@code key}.
-		 * 
-		 * @param key the key
-		 * @return the number of keys in the symbol table strictly less than {@code key}
-		 * @throws IllegalArgumentException if {@code key} is {@code null}
-		 */
-	
-	  public int rank(Key key) {
-		  if (key == null) throw new
-		  IllegalArgumentException("argument to rank() is null");
-		  return rank(key,
-				  root);
-		  }
+	 * Return the key in the symbol table of a given {@code rank}. This key has the
+	 * property that there are {@code rank} keys in the symbol table that are
+	 * smaller. In other words, this key is the ({@code rank}+1)st smallest key in
+	 * the symbol table.
+	 *
+	 * @param rank the order statistic
+	 * @return the key in the symbol table of given {@code rank}
+	 * @throws IllegalArgumentException unless {@code rank} is between 0 and
+	 *                                  <em>n</em>–1
+	 */
 
-	  // number of keys less than key in the subtree rooted at x
-	  private int rank(Key key, Node x) {
-		  if (x == null) return 0;
-		  int cmp = key.compareTo(x.key);
-		  if (cmp < 0) return rank(key, x.left);
-		  else if (cmp > 0) return 1 + size(x.left) + rank(key, x.right);
-		  else return size(x.left);
-		  }
-	  
-	 /***************************************************************************
-		 * Range count and range search.
-		 ***************************************************************************/
+	public Key select(int rank) {
+		if (rank < 0 || rank >= size()) { 
+			throw new  IllegalArgumentException("argument to select() is invalid: " + rank);
+		}
+		return select(root, rank);
+	}
+
+	// Return key in BST rooted at x of given rank. 
+	// Precondition: rank is in legal range. 
+	private Key select(Node x, int rank) {
+		if (x == null) return null;
+		int leftSize = size(x.left);
+		if (leftSize > rank) return select(x.left, rank); 
+		else if (leftSize < rank) return select(x.right, rank - leftSize - 1);
+		else return x.key;
+	}
+
+	/**
+	 * Return the number of keys in the symbol table strictly less than {@code key}.
+	 * 
+	 * @param key the key
+	 * @return the number of keys in the symbol table strictly less than {@code key}
+	 * @throws IllegalArgumentException if {@code key} is {@code null}
+	 */
+
+	public int rank(Key key) {
+		if (key == null) throw new
+		IllegalArgumentException("argument to rank() is null");
+		return rank(key,
+				root);
+	}
+
+	// number of keys less than key in the subtree rooted at x
+	private int rank(Key key, Node x) {
+		if (x == null) return 0;
+		int cmp = key.compareTo(x.key);
+		if (cmp < 0) return rank(key, x.left);
+		else if (cmp > 0) return 1 + size(x.left) + rank(key, x.right);
+		else return size(x.left);
+	}
+
+	/***************************************************************************
+	 * Range count and range search.
+	 ***************************************************************************/
 	/*
-	
-	*//**
-		 * Returns all keys in the symbol table as an {@code Iterable}. To iterate over
-		 * all of the keys in the symbol table named {@code st}, use the foreach
-		 * notation: {@code for (Key key : st.keys())}.
-		 * 
-		 * @return all keys in the symbol table as an {@code Iterable}
-		 */
-	
-	  public Iterable<Key> keys() { 
-		  if (isEmpty()) return new Queue<Key>(); 
-		  return
-			  keys(min(), max()); 
-		  }
-	  
-	 /**
-		 * Returns all keys in the symbol table in the given range, as an
-		 * {@code Iterable}.
-		 *
-		 * @param lo minimum endpoint
-		 * @param hi maximum endpoint
-		 * @return all keys in the symbol table between {@code lo} (inclusive) and
-		 *         {@code hi} (inclusive) as an {@code Iterable}
-		 * @throws IllegalArgumentException if either {@code lo} or {@code hi} is
-		 *                                  {@code null}
-		 */
-	  public Iterable<Key> keys(Key lo, Key hi) {
-	        if (lo == null) throw new IllegalArgumentException("first argument to keys() is null");
-	        if (hi == null) throw new IllegalArgumentException("second argument to keys() is null");
 
-	        Queue<Key> queue = new Queue<Key>();
-	        // if (isEmpty() || lo.compareTo(hi) > 0) return queue;
-	        keys(root, queue, lo, hi);
-	        return queue;
-	    } 
-	  
-	  // add the keys between lo and hi in the subtree rooted at x
-	    // to the queue
-	    private void keys(Node x, Queue<Key> queue, Key lo, Key hi) { 
-	        if (x == null) return; 
-	        int cmplo = lo.compareTo(x.key); 
-	        int cmphi = hi.compareTo(x.key); 
-	        if (cmplo < 0) keys(x.left, queue, lo, hi); 
-	        if (cmplo <= 0 && cmphi >= 0) queue.enqueue(x.key); 
-	        if (cmphi > 0) keys(x.right, queue, lo, hi); 
-	    } 
+	 *//**
+	 * Returns all keys in the symbol table as an {@code Iterable}. To iterate over
+	 * all of the keys in the symbol table named {@code st}, use the foreach
+	 * notation: {@code for (Key key : st.keys())}.
+	 * 
+	 * @return all keys in the symbol table as an {@code Iterable}
+	 */
+
+	public Iterable<Key> keys() { 
+		if (isEmpty()) return new Queue<Key>(); 
+		return
+				keys(min(), max()); 
+	}
+
+	/**
+	 * Returns all keys in the symbol table in the given range, as an
+	 * {@code Iterable}.
+	 *
+	 * @param lo minimum endpoint
+	 * @param hi maximum endpoint
+	 * @return all keys in the symbol table between {@code lo} (inclusive) and
+	 *         {@code hi} (inclusive) as an {@code Iterable}
+	 * @throws IllegalArgumentException if either {@code lo} or {@code hi} is
+	 *                                  {@code null}
+	 */
+	public Iterable<Key> keys(Key lo, Key hi) {
+		if (lo == null) throw new IllegalArgumentException("first argument to keys() is null");
+		if (hi == null) throw new IllegalArgumentException("second argument to keys() is null");
+
+		Queue<Key> queue = new Queue<Key>();
+		// if (isEmpty() || lo.compareTo(hi) > 0) return queue;
+		keys(root, queue, lo, hi);
+		return queue;
+	} 
+
+	// add the keys between lo and hi in the subtree rooted at x
+	// to the queue
+	private void keys(Node x, Queue<Key> queue, Key lo, Key hi) { 
+		if (x == null) return; 
+		int cmplo = lo.compareTo(x.key); 
+		int cmphi = hi.compareTo(x.key); 
+		if (cmplo < 0) keys(x.left, queue, lo, hi); 
+		if (cmplo <= 0 && cmphi >= 0) queue.enqueue(x.key); 
+		if (cmphi > 0) keys(x.right, queue, lo, hi); 
+	} 
 
 	/***************************************************************************
 	 * Check integrity of red-black tree data structure.
@@ -1200,7 +1172,7 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 		return isBalanced(x.left, black) && isBalanced(x.right, black);
 	}
 
-	
+
 	/**
 	 * Unit tests the {@code RedBlackBST} data type.
 	 *
@@ -1211,7 +1183,7 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 		testFindBlackNode1();
 
 		/* Add other tests for join() here if you like */
-		
+
 		smallJoinTest();
 		bigJoinTest();
 	}
